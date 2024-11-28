@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Load the dataset
 file_path =  "https://github.com/masterworker/repair_dashboard/blob/main/final_data.csv"
-df = pd.read_csv(file_path, encoding='utf-8-sig', low_memory=False)
+df = pd.read_csv(file_path, encoding='utf-8', low_memory=False)
 
 # Ensure the correct columns exist
 required_columns = ['일자', '총괄국', '우체국', '차량번호', '수리금액', '핵심단어(최종)', '구매일자', '총주행거리', '관리국명']
