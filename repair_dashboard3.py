@@ -4,7 +4,7 @@ import plotly.express as px
 from datetime import datetime
 
 # Load the dataset
-file_path =  "https://github.com/masterworker/repair_dashboard/blob/main/final_data.csv"
+file_path = "https://raw.githubusercontent.com/masterworker/repair_dashboard/main/final_data.csv"
 df = pd.read_csv(file_path, encoding='utf-8-sig', low_memory=False)
 
 # Ensure the correct columns exist
