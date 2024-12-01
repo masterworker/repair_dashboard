@@ -5,7 +5,8 @@ import plotly.express as px
 from datetime import datetime
 
 # Load the dataset
-url = "https://raw.githubusercontent.com/masterworker/repair_dashboard/main/final_data.csv"
+url = "https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/final_data.csv"
+
 df = pd.read_csv(url, encoding='utf-8-sig', low_memory=False)
 
 # Ensure the correct columns exist
@@ -146,7 +147,8 @@ else:
 
 
 # GitHub의 파일 raw URL (적절히 수정)
-url2 = "https://raw.githubusercontent.com/masterworker/repair_dashboard/main/교체대상_목록.csv"
+url2 = "https://github.com/masterworker/repair_dashboard/raw/refs/heads/main/%EA%B5%90%EC%B2%B4%EB%8C%80%EC%83%81_%EB%AA%A9%EB%A1%9D.csv"
+
 
 # 버튼 클릭 시 파일 가져오기 및 다운로드
 st.title("GitHub 파일 다운로드 예제")
