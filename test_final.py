@@ -146,33 +146,6 @@ else:
         st.dataframe(replacement_list)
 
 
-# GitHub의 파일 raw URL (적절히 수정)
-url2 = "https://github.com/masterworker/repair_dashboard/raw/refs/heads/main/%EA%B5%90%EC%B2%B4%EB%8C%80%EC%83%81_%EB%AA%A9%EB%A1%9D.csv"
-
-
-# 버튼 클릭 시 파일 가져오기 및 다운로드
-st.title("GitHub 파일 다운로드 예제")
-
-if st.button("파일 다운로드"):
-    try:
-        # GitHub에서 파일 가져오기
-        response = requests.get(url2)
-        response.raise_for_status()  # 요청 성공 여부 확인
-
-        # 파일 내용 가져오기
-        file_content = response.content
-        
-        # 다운로드 버튼을 통해 파일 다운로드 제공
-        st.download_button(
-            label="파일 다운로드 (GitHub에서 가져옴)",
-            data=file_content,
-            file_name='filename.csv',
-            mime='text/csv'
-        )
-    except requests.exceptions.RequestException as e:
-        st.error(f"파일을 불러오는데 문제가 발생했습니다: {e}")
-
-
 
 # To run this as an app, save this script as 'repair_dashboard.py' and run the following command in terminal:
 # streamlit run repair_dashboard.py
