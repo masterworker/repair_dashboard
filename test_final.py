@@ -111,10 +111,10 @@ else:
         col1, col2 = st.columns(2)
         
         with col1:
-            st.image("1.png", caption=f"{vehicle} 엔진 수리 가이드 1")
+            st.image("https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/1.png", caption=f"{vehicle} 엔진 수리 가이드 1")
         
         with col2:
-            st.image("2.png", caption=f"{vehicle} 엔진 수리 가이드 2")
+            st.image("https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/2.png", caption=f"{vehicle} 엔진 수리 가이드 2")
 
 
     
