@@ -104,6 +104,21 @@ else:
 
             st.write("분석 결과가 위에 표시됩니다.")
 
+    # 특정 차량번호가 선택되었고 엔진 수리 내역이 있는 경우에만 이미지 표시
+    if vehicle != "전체" and '엔진수리' in df['핵심단어(최종)'].values:
+        st.subheader(f"{vehicle} 차량 엔진 수리 관련 참고 자료")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.image("1.png", caption=f"{vehicle} 엔진 수리 가이드 1")
+        
+        with col2:
+            st.image("2.png", caption=f"{vehicle} 엔진 수리 가이드 2")
+
+
+    
+
     elif selected_tab == "이륜차 교체대상 선정 대시보드":
         st.header("이륜차 교체대상 선정 대시보드")
 
