@@ -107,7 +107,7 @@ else:
 # 특정 차량번호가 선택되었고 엔진 수리 내역이 있는 경우에만 이미지 표시
         if vehicle != "전체":
         # 선택된 차량번호 데이터 필터링
-        selected_vehicle_data = df[df['차량번호'] == vehicle]
+            selected_vehicle_data = df[df['차량번호'] == vehicle]
     
         if not selected_vehicle_data.empty and '엔진수리' in selected_vehicle_data['핵심단어(최종)'].values:
             st.subheader(f"{vehicle} 차량 엔진 수리 관련 참고 자료")
