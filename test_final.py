@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -36,7 +35,7 @@ else:
 
         # Filter data by date range
         df['일자'] = pd.to_datetime(df['일자'], errors='coerce')
-        df = df.dropna(subset=['일자'])  # Drop rows where '날짜' could not be converted
+        df = df.dropna(subset=['일자'])  # Drop rows where '일자' could not be converted
         df = df[(df['일자'].dt.date >= date_range[0]) & (df['일자'].dt.date <= date_range[1])]
 
         # 총괄국 selection
@@ -44,14 +43,14 @@ else:
         if total_office != "전체":
             df = df[df['총괄국'] == total_office]
 
-        # 우체국 selection (filtered by 총괄국)
-        post_office_options = ["전체"] + sorted(df[df['총괄국'] == total_office]['우체국'].dropna().unique().tolist())
+        # 우체국 selection
+        post_office_options = ["전체"] + sorted(df['우체국'].dropna().unique().tolist())
         post_office = st.sidebar.selectbox("우체국 선택", options=post_office_options)
         if post_office != "전체":
             df = df[df['우체국'] == post_office]
 
-        # 차량번호 selection (filtered by 우체국)
-        vehicle_options = ["전체"] + sorted(df[df['우체국'] == post_office]['차량번호'].dropna().unique().tolist())
+        # 차량번호 selection
+        vehicle_options = ["전체"] + sorted(df['차량번호'].dropna().unique().tolist())
         vehicle = st.sidebar.selectbox("차량번호 선택", options=vehicle_options)
         if vehicle != "전체":
             df = df[df['차량번호'] == vehicle]
@@ -61,17 +60,17 @@ else:
             # Visualization 1: Monthly repair cost
             df_monthly = df.resample('M', on='일자').sum(numeric_only=True)['수리금액'].reset_index()
             avg_repair_cost = df_monthly['수리금액'].mean()
-            
+
             fig_bar = px.bar(
-                df_monthly, 
-                x='일자', 
-                y='수리금액', 
+                df_monthly,
+                x='일자',
+                y='수리금액',
                 title='월별 수리금액',
                 labels={'일자': '월', '수리금액': '수리금액 (원)'}
             )
             fig_bar.add_scatter(
-                x=df_monthly['일자'], 
-                y=[avg_repair_cost] * len(df_monthly), 
+                x=df_monthly['일자'],
+                y=[avg_repair_cost] * len(df_monthly),
                 mode='lines',
                 name='평균 수리금액',
                 line=dict(dash='dot', color='red')
@@ -81,10 +80,10 @@ else:
             # Visualization 2: Pie chart of repair details by count
             repair_counts = df['핵심단어(최종)'].value_counts().reset_index()
             repair_counts.columns = ['핵심단어(최종)', '횟수']
-            
+
             fig_pie_count = px.pie(
-                repair_counts, 
-                names='핵심단어(최종)', 
+                repair_counts,
+                names='핵심단어(최종)',
                 values='횟수',
                 title='선택된 기간의 수리 내역 비율 (횟수 기준)'
             )
@@ -93,10 +92,10 @@ else:
             # Visualization 3: Pie chart of repair details by cost
             repair_costs = df.groupby('핵심단어(최종)')['수리금액'].sum().reset_index()
             repair_costs.columns = ['핵심단어(최종)', '수리금액']
-            
+
             fig_pie_cost = px.pie(
-                repair_costs, 
-                names='핵심단어(최종)', 
+                repair_costs,
+                names='핵심단어(최종)',
                 values='수리금액',
                 title='선택된 기간의 수리 내역 비율 (수리금액 기준)'
             )
@@ -104,28 +103,21 @@ else:
 
             st.write("분석 결과가 위에 표시됩니다.")
 
-# 특정 차량번호가 선택되었고 엔진 수리 내역이 있는 경우에만 이미지 표시
+        # 특정 차량번호가 선택되었고 엔진 수리 내역이 있는 경우에만 이미지 표시
         if vehicle != "전체":
-    # 선택된 차량번호 데이터 필터링
             selected_vehicle_data = df[df['차량번호'] == vehicle]
+            if not selected_vehicle_data.empty and '엔진수리' in selected_vehicle_data['핵심단어(최종)'].values:
+                st.subheader(f"{vehicle} 차량 엔진 수리 관련 참고 자료")
 
-        if not selected_vehicle_data.empty and '엔진수리' in selected_vehicle_data['핵심단어(최종)'].values:
-            st.subheader(f"{vehicle} 차량 엔진 수리 관련 참고 자료")
+                col1, col2 = st.columns(2)
 
-            col1, col2 = st.columns(2)
+                with col1:
+                    st.image("https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/1.png", caption=f"{vehicle} 엔진 수리 가이드 1")
 
-            with col1:
-                st.image("https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/1.png", caption=f"{vehicle} 엔진 수리 가이드 1")
-
-            with col2:
-                st.image("https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/2.png", caption=f"{vehicle} 엔진 수리 가이드 2")
-        else:
-            st.warning(f"{vehicle} 차량에 대한 엔진 수리 내역이 없습니다.")
-    else:
-        # '전체'가 선택된 경우 selected_vehicle_data를 빈 DataFrame으로 초기화
-        selected_vehicle_data = pd.DataFrame()
-
-    
+                with col2:
+                    st.image("https://raw.githubusercontent.com/masterworker/repair_dashboard/refs/heads/main/2.png", caption=f"{vehicle} 엔진 수리 가이드 2")
+            else:
+                st.warning(f"{vehicle} 차량에 대한 엔진 수리 내역이 없습니다.")
 
     elif selected_tab == "이륜차 교체대상 선정 대시보드":
         st.header("이륜차 교체대상 선정 대시보드")
@@ -137,7 +129,6 @@ else:
         # Remove duplicate vehicle numbers, keeping only the first occurrence
         df = df.drop_duplicates(subset=['차량번호'], keep='first')
 
-
         # Calculate '내용년수'
         df['구매일자'] = pd.to_datetime(df['구매일자'], errors='coerce')
         current_date = pd.to_datetime(datetime.now())
@@ -146,15 +137,8 @@ else:
         # Calculate '교체점수'
         df['총주행거리'] = pd.to_numeric(df['총주행거리'], errors='coerce').fillna(0)
         df['교체점수'] = 0
-        # Add/Subtract points for 내용년수
         df['교체점수'] += (df['내용년수'] - 36).apply(lambda x: x if x > 0 else x * 3)
-        # Add/Subtract points for 총주행거리
         df['교체점수'] += ((df['총주행거리'] - 25000) / 1000).apply(lambda x: x if x > 0 else x * 2).astype(int)
-
-        # Save filtered data to CSV for 교체검토차량
-        # df_filtered = df[['총괄국', '우체국', '차량번호', '구매일자', '내용년수', '총주행거리']]
-        # df_filtered.to_csv(r'C:\Users\voice\Desktop\공모전\이륜차통합\교체검토차량.csv', index=False, encoding='utf-8-sig')
-
 
         # Sort vehicles by '교체점수' descending
         df = df.sort_values(by='교체점수', ascending=False)
@@ -167,8 +151,3 @@ else:
         replacement_list.index = range(1, len(replacement_list) + 1)
         st.write("교체 대상 차량 목록:")
         st.dataframe(replacement_list)
-
-
-
-# To run this as an app, save this script as 'repair_dashboard.py' and run the following command in terminal:
-# streamlit run repair_dashboard.py
